@@ -6,13 +6,15 @@
     <version>${version}</version>
     <packaging>jar</packaging>
     <properties>
-        <dl4j.version>0.7.1</dl4j.version>
+        <dl4j.version>0.8.0</dl4j.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.nd4j</groupId>
+            <!-- Use nd4j-native-platform for CPU and nd4j-cuda-8.0-platform or nd4j-cuda-7.5-platform for GPU -->
+            <!-- Note: Some use-cases (like Word2Vec work better with CPU) -->
             <artifactId>nd4j-native-platform</artifactId>
             <version>${dl4j.version}</version>
         </dependency>

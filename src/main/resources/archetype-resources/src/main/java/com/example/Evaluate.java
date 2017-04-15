@@ -11,6 +11,7 @@ import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
+import org.nd4j.linalg.dataset.api.preprocessor.NormalizerStandardize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,9 +33,9 @@ public class Evaluate {
 
         if (cmd.hasOption("i") && cmd.hasOption("m")) {
             MultiLayerNetwork model = ModelSerializer.restoreMultiLayerNetwork(modelName);
-            DataIterator it = DataIterator.irisCsv(input);
+            DataIterator<NormalizerStandardize> it = DataIterator.irisCsv(input);
             RecordReaderDataSetIterator testData = it.getIterator();
-            DataNormalization normalizer = it.getNormalizer();
+            NormalizerStandardize normalizer = it.getNormalizer();
             normalizer.load(
                     new File(modelName + ".norm1"),
                     new File(modelName + ".norm2"),

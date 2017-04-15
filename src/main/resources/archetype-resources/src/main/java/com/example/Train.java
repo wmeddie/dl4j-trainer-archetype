@@ -17,7 +17,9 @@ import org.deeplearning4j.ui.api.UIServer;
 import org.deeplearning4j.ui.stats.StatsListener;
 import org.deeplearning4j.ui.storage.InMemoryStatsStorage;
 import org.deeplearning4j.util.ModelSerializer;
+import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
+import org.nd4j.linalg.dataset.api.preprocessor.NormalizerStandardize;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +35,7 @@ public class Train {
         return new NeuralNetConfiguration.Builder()
                 .seed(42)
                 .iterations(1)
-                .activation("relu")
+                .activation(Activation.RELU)
                 .weightInit(WeightInit.XAVIER)
                 .learningRate(0.1)
                 .regularization(true).l2(1e-4)
@@ -41,7 +43,7 @@ public class Train {
                         new DenseLayer.Builder().nIn(nIn).nOut(3).build(),
                         new DenseLayer.Builder().nIn(3).nOut(3).build(),
                         new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
-                                .activation("softmax")
+                                .activation(Activation.SOFTMAX)
                                 .nIn(3)
                                 .nOut(nOut)
                                 .build()
@@ -71,9 +73,9 @@ public class Train {
     private static void train(CommandLine c) {
         int nEpochs = Integer.parseInt(c.getOptionValue("e"));
         String modelName = c.getOptionValue("o");
-        DataIterator it = DataIterator.irisCsv(c.getOptionValue("i"));
+        DataIterator<NormalizerStandardize> it = DataIterator.irisCsv(c.getOptionValue("i"));
         RecordReaderDataSetIterator trainData = it.getIterator();
-        DataNormalization normalizer = it.getNormalizer();
+        NormalizerStandardize normalizer = it.getNormalizer();
 
         log.info("Data Loaded");
 

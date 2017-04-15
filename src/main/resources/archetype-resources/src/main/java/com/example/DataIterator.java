@@ -9,11 +9,11 @@ import org.nd4j.linalg.dataset.api.preprocessor.NormalizerStandardize;
 import java.io.File;
 
 
-class DataIterator {
+class DataIterator<NormT> {
     private RecordReaderDataSetIterator iterator;
-    private DataNormalization normalizer;
+    private NormT normalizer;
 
-    private DataIterator(RecordReaderDataSetIterator it, DataNormalization norm) {
+    private DataIterator(RecordReaderDataSetIterator it, NormT norm) {
         this.iterator = it;
         this.normalizer = norm;
     }
@@ -22,11 +22,11 @@ class DataIterator {
         return iterator;
     }
 
-    DataNormalization getNormalizer() {
+    NormT getNormalizer() {
         return normalizer;
     }
 
-    static DataIterator irisCsv(String name) {
+    static DataIterator<NormalizerStandardize> irisCsv(String name) {
         CSVRecordReader recordReader = new CSVRecordReader(0, ",");
         try {
             recordReader.initialize(new FileSplit(new File(name)));
@@ -54,6 +54,6 @@ class DataIterator {
 
         iterator.setPreProcessor(normalizer);
 
-        return new DataIterator(iterator, normalizer);
+        return new DataIterator<>(iterator, normalizer);
     }
 }
